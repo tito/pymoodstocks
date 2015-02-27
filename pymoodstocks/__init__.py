@@ -29,9 +29,21 @@ class MoodstocksBase(EventDispatcher):
         pass
 
     def start(self):
+        """Start the moodstock scanner
+        """
         pass
 
     def stop(self):
+        """Close the view and stop the scanner
+        """
+        pass
+
+    def resume(self):
+        """Resume the scanner.
+
+        This must be called if you want to check for another result after a
+        result have been found.
+        """
         pass
 
     def on_button_clicked(self):

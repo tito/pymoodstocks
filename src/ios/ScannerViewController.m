@@ -51,6 +51,10 @@ MSAutoScannerSession *_scannerSession;
     [super didReceiveMemoryWarning];
 }
 
+- (void)resume {
+    [_scannerSession resumeProcessing];
+}
+
 - (void)dealloc
 {
     [_scannerSession stopRunning];

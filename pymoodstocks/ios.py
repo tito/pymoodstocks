@@ -35,6 +35,9 @@ class Moodstocks(MoodstocksBase):
     def stop(self):
         self.scanner.stop()
 
+    def resume(self):
+        self.scanner.resume()
+
     @protocol("PyMSScannerDelegate")
     def buttonClicked(self):
         self.dispatch("on_button_clicked")

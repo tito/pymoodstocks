@@ -1,0 +1,15 @@
+#:kivy 1.8
+
+BoxLayout:
+	padding: "20sp"
+	Label:
+		text: "Type: {}\nData: {}".format(app.moodtype, app.mooddata)
+		font_size: "20sp"
+		text_size: self.width, None
+
+	AnchorLayout:
+		Button:
+			text: "Scan"
+			on_release: app.do_scan()
+			size_hint: None, None
+			size: "200sp", "48sp"

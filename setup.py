@@ -12,7 +12,6 @@ packages = [
     "pymoodstocks",
 ]
 
-
 setup(
     name="pymoodstocks",
     version="0.1",

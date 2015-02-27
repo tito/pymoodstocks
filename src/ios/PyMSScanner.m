@@ -72,8 +72,12 @@
 }
 
 - (void) stop {
-    NSLog(@"Stop the scanner");
     [_controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) resume {
+	if (_scannerVC != nil)
+		[_scannerVC resume];
 }
 
 @end
