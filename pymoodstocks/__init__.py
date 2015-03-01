@@ -13,7 +13,13 @@ from kivy.properties import StringProperty
 
 class MoodstocksBase(EventDispatcher):
 
-    __events__ = ("on_button_clicked", "on_scan")
+    __events__ = (
+        "on_button_clicked",
+        "on_scan",
+        "on_sync_start",
+        "on_sync_complete",
+        "on_sync_failed",
+        "on_sync_progress")
 
     title = StringProperty("Scan an object")
     result_data = StringProperty(allownone=True)
@@ -46,14 +52,36 @@ class MoodstocksBase(EventDispatcher):
         """
         pass
 
+    def unload(self):
+        """Unload everything we allocated.
+        The scanner will not be usable after that.
+        """
+        pass
+
     def on_button_clicked(self):
         self.stop()
 
     def on_scan(self, result_type, result_data):
         pass
 
+    def on_sync_start(self):
+        print("Moodstocks SDK: Sync will start.")
+
+    def on_sync_complete(self):
+        print("Moodstocks SDK: Sync succeeded.")
+
+    def on_sync_failed(self, code, message):
+        print("Moodstocks SDK: Sync failed: ({}){}".format(
+              code, message))
+
+    def on_sync_progress(self, total, current):
+        print("Moodstocks SDK: Sync progressing: {}%".format(
+              int(float(current) / float(total) * 100)))
+
 
 if platform == "ios":
-    from pymoodstocks.ios import Moodstocks
+    from pymoodstocks.pms_ios import Moodstocks
+elif platform == "android":
+    from pymoodstocks.pms_android import Moodstocks
 else:
     raise Exception("Unsupported platform")
