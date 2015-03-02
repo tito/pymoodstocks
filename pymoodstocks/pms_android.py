@@ -2,6 +2,7 @@ from android.runnable import run_on_ui_thread
 from pymoodstocks import MoodstocksBase
 from jnius import autoclass, PythonJavaClass, java_method, cast
 from kivy.clock import Clock
+from kivy.metrics import sp
 from threading import Lock
 from collections import deque
 
@@ -14,7 +15,8 @@ PythonActivity = autoclass("org.renpy.android.PythonActivity")
 RelativeLayout = autoclass("android.widget.RelativeLayout")
 LayoutParams = autoclass("android.widget.RelativeLayout$LayoutParams")
 SurfaceView = autoclass("android.view.SurfaceView")
-TypedValue = autoclass("android.util.TypedValue")
+Gravity = autoclass("android.view.Gravity")
+String = autoclass("java.lang.String")
 context = PythonActivity.mActivity
 
 TYPES = ResultType.IMAGE | ResultType.QRCODE | ResultType.EAN13
@@ -91,7 +93,7 @@ class AutoScannerSessionListener(PythonJavaClass):
 
     @java_method("(Ljava/lang/String;)V")
     def onWarning(self, warning):
-        pass
+        print("MoodstocksWarning: {}".format(warning))
 
 
 class Moodstocks(MoodstocksBase):
@@ -120,6 +122,7 @@ class Moodstocks(MoodstocksBase):
     def unload(self):
         if not self.scanner:
             return
+        self.stop()
         self.scanner.close()
         self.scanner.destroy()
         self.scanner = None
@@ -127,6 +130,13 @@ class Moodstocks(MoodstocksBase):
     @run_on_ui_thread
     def start(self):
         # create a surface for displaying the preview
+
+        # XXX android issue or moodstocks issue, i don't known
+        # but if we don't recreate the preview and session,
+        # the recognition works only one time.
+        self._preview = None
+        self._session = None
+
         preview = self._create_preview()
         if not self._session:
             self._session = AutoScannerSession(
@@ -161,12 +171,11 @@ class Moodstocks(MoodstocksBase):
             TextView = autoclass("android.widget.TextView")
             Button = autoclass("android.widget.Button")
             toolbar = RelativeLayout(context)
-            toolbar.setBackgroundColor(0x030303ff)
-            x = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 2,
-                    context.getResources().getDisplayMetrics())
+            toolbar.setBackgroundColor(0xff4384f6 % (2 ** 31 - 1))
+            toolbar.setVerticalGravity(RelativeLayout.CENTER_VERTICAL)
+            x = sp(2)
+            h = sp(48)
             toolbar.setPaddingRelative(x, x, x, x)
-            h = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 48,
-                    context.getResources().getDisplayMetrics())
             toolbar.setLayoutParams(LayoutParams(-1, h))
             layout.addView(toolbar)
             text = TextView(context)
@@ -177,21 +186,29 @@ class Moodstocks(MoodstocksBase):
 
             lp = LayoutParams(-1, h)
             lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-            lp.addRule(RelativeLayout.CENTER_VERTICAL)
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT)
             text.setLayoutParams(lp)
-            lp = LayoutParams(-1, h)
+            text.setGravity(Gravity.CENTER)
+            lp = LayoutParams(-2, h)
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-            lp.addRule(RelativeLayout.CENTER_VERTICAL)
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT)
             button.setLayoutParams(lp)
+            button.setPaddingRelative(sp(20), 0, sp(20), 0)
 
-            String = autoclass("java.lang.String")
-            s = String("Hello world")
             sb = String("Done")
-            text.setText(cast("java.lang.CharSequence", s))
             button.setText(cast("java.lang.CharSequence", sb))
+            self._preview_title = text
+            self._set_title(self.title)
 
         context.setContentView(self._preview_layout, self._preview_rlp)
         return self._preview
+
+    def _set_title(self, title):
+        self._preview_title.setText(
+            cast("java.lang.CharSequence", String(self.title)))
+
+    def on_title(self, instance, value):
+        self._set_title(self.title)
 
     def safe_dispatch(self, *args):
         try:
@@ -214,26 +231,3 @@ class Moodstocks(MoodstocksBase):
         finally:
             self._lock.release()
 
-    """
-    @protocol("PyMSScannerDelegate")
-    def buttonClicked(self):
-        self.dispatch("on_button_clicked")
-
-    @protocol("MSAutoScannerSessionDelegate")
-    def session_didFindResult_(self, session, result):
-        result_type_i = result.type
-        if result_type_i == MSResultTypeNone:
-            self.result_type = "none"
-        elif result_type_i == MSResultTypeEAN8:
-            self.result_type = "ean8"
-        elif result_type_i == MSResultTypeEAN13:
-            self.result_type = "ean13"
-        elif result_type_i == MSResultTypeQRCode:
-            self.result_type = "qrcode"
-        elif result_type_i == MSResultTypeDatamatrix:
-            self.result_type = "datamatrix"
-        else:
-            self.result_type = "image"
-        self.result_data = result.string.UTF8String()
-        self.dispatch("on_scan", self.result_type, self.result_data)
-    """
