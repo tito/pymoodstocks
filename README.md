@@ -12,7 +12,7 @@ qrcode, barcode and image.
 
 ### iOS
 
-You need to use the latest kivy-ios toolchain (on the branch poly-arch):
+You need to use the latest kivy-ios toolchain:
 
     ./toolchain.py build pymoodstocks
 
