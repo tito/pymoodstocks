@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScannerViewController">
+            <connections>
+                <outlet property="itemButton" destination="axq-OG-87a" id="Rmf-ba-zdJ"/>
+                <outlet property="videoPreview" destination="6jQ-y7-W4g" id="dy7-Jw-xoy"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="QqF-18-w7D"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yu1-07-MyH">
+                    <rect key="frame" x="133" y="546" width="82" height="22"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Return"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6jQ-y7-W4g">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="6jQ-y7-W4g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="CzG-dF-JAQ"/>
+                <constraint firstAttribute="bottom" secondItem="6jQ-y7-W4g" secondAttribute="bottom" id="JOP-lf-8v9"/>
+                <constraint firstAttribute="trailing" secondItem="6jQ-y7-W4g" secondAttribute="trailing" id="P7m-Jb-Bj0"/>
+                <constraint firstAttribute="trailing" secondItem="6jQ-y7-W4g" secondAttribute="trailing" id="Xrc-uQ-t1Z"/>
+                <constraint firstItem="6jQ-y7-W4g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="iRG-cQ-jAE"/>
+                <constraint firstItem="6jQ-y7-W4g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="kbx-79-KY4"/>
+                <constraint firstAttribute="bottom" secondItem="6jQ-y7-W4g" secondAttribute="bottom" id="sxl-Vr-Qh5"/>
+            </constraints>
+            <point key="canvasLocation" x="406" y="304"/>
+        </view>
+        <navigationBar contentMode="scaleToFill" id="Hit-VL-tFn">
+            <rect key="frame" x="0.0" y="0.0" width="476" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <items>
+                <navigationItem title="Scan a page" id="JJX-Y4-maf">
+                    <barButtonItem key="rightBarButtonItem" title="Done" id="axq-OG-87a">
+                        <connections>
+                            <action selector="buttonClicked:" destination="-1" id="f8a-jh-9qP"/>
+                        </connections>
+                    </barButtonItem>
+                </navigationItem>
+            </items>
+            <point key="canvasLocation" x="421" y="-176"/>
+        </navigationBar>
+    </objects>
+</document>

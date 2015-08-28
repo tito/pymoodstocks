@@ -8,7 +8,7 @@ __all__ = ("Moodstocks", )
 
 from kivy.utils import platform
 from kivy.event import EventDispatcher
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, BooleanProperty
 
 
 class MoodstocksBase(EventDispatcher):
@@ -24,6 +24,7 @@ class MoodstocksBase(EventDispatcher):
     title = StringProperty("Scan an object")
     result_data = StringProperty(allownone=True)
     result_type = StringProperty(allownone=True)
+    popup = BooleanProperty(True)
 
     def __init__(self, api_key, api_secret):
         self.api_key = api_key

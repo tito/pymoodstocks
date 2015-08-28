@@ -30,6 +30,7 @@ class Moodstocks(MoodstocksBase):
         self.scanner.setTitle_(self.title)
 
     def start(self):
+        self.scanner.setPopup(int(self.popup))
         self.scanner.start()
 
     def stop(self):

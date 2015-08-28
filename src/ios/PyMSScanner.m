@@ -17,6 +17,7 @@
     self = [super init];
     _scannerVC = nil;
     _delegate = delegate;
+	_popup = 1;
     
     NSString *path = [MSScanner cachesPathFor:@"scanner.db"];
     _scanner = [[MSScanner alloc] init];
@@ -52,10 +53,18 @@
     }
 }
 
+- (void) setPopup:(int) popup {
+	_popup = popup;
+}
+
 - (void) start {
     NSLog(@"Start the scanner");
     if (_scannerVC == nil) {
-        _scannerVC = [[ScannerViewController alloc] init];
+		if (_popup) {
+			_scannerVC = [[ScannerViewController alloc] initWithNibName:@"ScannerViewControllerPopup" bundle:nil];
+		} else {
+			_scannerVC = [[ScannerViewController alloc] initWithNibName:@"ScannerViewControllerFullscreen" bundle:nil];
+		}	
         _scannerVC.scanner = _scanner;
         _scannerVC.delegate = _delegate;
     }
@@ -66,13 +75,34 @@
     UIWindow *window = [windows firstObject];
     UIViewController *controller = [window rootViewController];
     _controller = controller;
-    [controller showViewController:_scannerVC sender:nil];
+    
+	if (_popup) {
+		[controller showViewController:_scannerVC sender:nil];
+	} else {
+		window.rootViewController = _scannerVC;
+		[_scannerVC addChildViewController:controller];
+		[_scannerVC.view addSubview:controller.view];
+		[controller didMoveToParentViewController:_scannerVC];
+	}
+
+
     if (_title != nil)
         [_scannerVC setTitle:_title];
 }
 
 - (void) stop {
-    [_controller dismissViewControllerAnimated:YES completion:nil];
+	if (_popup) {
+		[_controller dismissViewControllerAnimated:YES completion:nil];
+	} else {
+		[_controller removeFromParentViewController];
+		[_controller.view removeFromSuperview];
+		[_controller removeFromParentViewController];
+
+		UIApplication *app = [UIApplication sharedApplication];
+		NSArray *windows = [app windows];
+		UIWindow *window = [windows firstObject];
+		window.rootViewController = _controller;
+	}
 }
 
 - (void) resume {

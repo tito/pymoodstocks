@@ -27,6 +27,7 @@
     MSScanner *_scanner;
     ScannerViewController *_scannerVC;
     UIViewController *_controller;
+    int _popup;
     NSString *_title;
     NSObject *_delegate;
 }

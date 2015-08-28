@@ -11,7 +11,7 @@
 
 @interface ScannerViewController : UIViewController
 
-@property MSScanner *scanner;
-@property id delegate;
+@property(assign) MSScanner *scanner;
+@property(assign) id delegate;
 
 @end
