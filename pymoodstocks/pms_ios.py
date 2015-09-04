@@ -27,9 +27,9 @@ class Moodstocks(MoodstocksBase):
     def init(self):
         self.scanner = autoclass("PyMSScanner").alloc().initWithApiKey_secret_delegate_(
                 self.api_key, self.api_secret, self)
-        self.scanner.setTitle_(self.title)
 
     def start(self):
+        self.scanner.setTitle_(self.title)
         self.scanner.setPopup_(int(self.popup))
         self.scanner.start()
 
